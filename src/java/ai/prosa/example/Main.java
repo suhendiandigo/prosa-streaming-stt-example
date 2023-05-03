@@ -45,6 +45,11 @@ public class Main {
                 System.out.println("Partial: " + transcript);
             }
 
+            @Override
+            public void handleException(Throwable exc) {
+                System.out.println("Exception raised: " + exc);
+            }
+
         };
 
         StreamingAsrClient client = new StreamingAsrClient(

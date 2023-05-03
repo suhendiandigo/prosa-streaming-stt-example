@@ -63,7 +63,12 @@ public class StreamingAsrClient extends Endpoint implements MessageHandler.Whole
     }
 
     private void setException(Throwable exc) {
-        future.completeExceptionally(exc);
+        try {
+            callback.handleException(exc);
+            future.completeExceptionally(exc);
+        } catch (Throwable exc2) {
+            future.completeExceptionally(exc2);
+        }
     }
 
     public Future<Void> start() {
@@ -134,6 +139,11 @@ public class StreamingAsrClient extends Endpoint implements MessageHandler.Whole
                             (double) data.get("time_end")
                     ));
                     break;
+                case "quota":
+                    throw new OutOfQuotaException(
+                            (double) data.get("timestamp"),
+                            (int) data.get("quota_used")
+                    );
             }
         } catch (Throwable exc) {
             setException(exc);

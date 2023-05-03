@@ -10,4 +10,6 @@ public interface TranscriptionCallback {
 
     void onPartialTranscript(PartialTranscript transcript);
 
+    void handleException(Throwable exc);
+
 }
